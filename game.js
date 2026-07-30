@@ -244,7 +244,9 @@
 
   document.addEventListener('keydown', (event) => {
     const keys = { ArrowUp: 'up', w: 'up', W: 'up', ArrowDown: 'down', s: 'down', S: 'down', ArrowLeft: 'left', a: 'left', A: 'left', ArrowRight: 'right', d: 'right', D: 'right' };
-    if (keys[event.key]) { event.preventDefault(); setDirection(keys[event.key]); }
+    const physicalKeys = { KeyW: 'up', KeyA: 'left', KeyS: 'down', KeyD: 'right' };
+    const pressedDirection = keys[event.key] || physicalKeys[event.code];
+    if (pressedDirection) { event.preventDefault(); setDirection(pressedDirection); }
     if (event.key === ' ' && (state === 'running' || state === 'paused')) { event.preventDefault(); togglePause(); }
   });
   directionButtons.forEach((button) => button.addEventListener('click', () => setDirection(button.dataset.direction)));
