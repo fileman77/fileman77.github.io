@@ -233,11 +233,33 @@
 
   function drawCell(cell, color, radius = 3) { context.fillStyle = color; context.beginPath(); context.roundRect(cell.x * cellSize + 2, cell.y * cellSize + 2, cellSize - 4, cellSize - 4, radius); context.fill(); }
 
+  function drawFood(cell) {
+    const centerX = (cell.x + 0.5) * cellSize;
+    const centerY = (cell.y + 0.56) * cellSize;
+    context.save();
+    context.fillStyle = '#f85149';
+    context.beginPath();
+    context.arc(centerX - 3, centerY, cellSize * 0.24, 0, Math.PI * 2);
+    context.arc(centerX + 3, centerY, cellSize * 0.24, 0, Math.PI * 2);
+    context.fill();
+    context.strokeStyle = '#8b949e';
+    context.lineWidth = 2;
+    context.beginPath();
+    context.moveTo(centerX, centerY - 5);
+    context.lineTo(centerX + 1, centerY - 9);
+    context.stroke();
+    context.fillStyle = '#2ea043';
+    context.beginPath();
+    context.ellipse(centerX + 5, centerY - 8, 4, 2, -0.35, 0, Math.PI * 2);
+    context.fill();
+    context.restore();
+  }
+
   function drawScene() {
     context.fillStyle = '#0d1117'; context.fillRect(0, 0, canvas.width, canvas.height);
     context.strokeStyle = 'rgba(240,246,252,.06)'; context.lineWidth = 1;
     for (let index = 1; index < gridSize; index += 1) { context.beginPath(); context.moveTo(index * cellSize, 0); context.lineTo(index * cellSize, canvas.height); context.stroke(); context.beginPath(); context.moveTo(0, index * cellSize); context.lineTo(canvas.width, index * cellSize); context.stroke(); }
-    if (food) drawCell(food, '#f85149', 8);
+    if (food) drawFood(food);
     enemies.forEach((enemy) => { drawCell(enemy, enemy.exploding ? '#ff7b72' : '#d29922', enemy.exploding ? 10 : 5); if (enemy.exploding) { context.strokeStyle = '#ff7b72'; context.beginPath(); context.arc((enemy.x + .5) * cellSize, (enemy.y + .5) * cellSize, explosionRadius * cellSize, 0, Math.PI * 2); context.stroke(); } });
     snake.forEach((part, index) => drawCell(part, index === 0 ? '#2ea043' : '#56d364', 5));
   }
